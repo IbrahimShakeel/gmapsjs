@@ -1,7 +1,7 @@
 
 var map;
 
-//Map style taken from Snazzy Maps. https://snazzymaps.com/
+//Map style sourced from Snazzy Maps. https://snazzymaps.com/
 var snazzy = [{"featureType":"water","stylers":[{"saturation":43},{"lightness":-11},{"hue":"#0088ff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ece2d9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","stylers":[{"visibility":"off"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi.park","stylers":[{"visibility":"on"}]},{"featureType":"poi.sports_complex","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","stylers":[{"visibility":"simplified"}]}];
 // Latitude and longitude to Male', Maldives adjusted to center the gold star to Male' Maldives.
 var maldivesLatLng = {lat: 0.155496, lng: 73.509347};
@@ -10,13 +10,14 @@ function initialize() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 4,
     styles: snazzy,
-    center: new google.maps.LatLng(5.175496, 76.509347), // Lat has been adjusted my 1.0 points to make sure indonesia is visible on the screen when Maldives is on center of the screen
+    center: new google.maps.LatLng(5.175496, 76.509347), // Lat has been adjusted by 1.0 points to make sure Indonesia is
+                                                        //visible on the screen when Maldives is on center(ish) of the screen
     mapTypeId: google.maps.MapTypeId.TERRAIN //becuase I like terrain view.
   });
 
   //Star has been copied from Google https://developers.google.com/maps/documentation/javascript/examples/icon-complex
-  // or you could completely remove this part and use and actual image or icon making the maldives.
-  // I am actually marking Maldives because it is too fu*&ing small to see when the map is zoomed out -_-
+  // or you could completely remove this part and use an actual image or icon marking the maldives.
+  // On a totally serious note, I am actually marking Maldives because it is too fu*&ing small to see when the map is zoomed out -_-
   var mordisStar = {
     path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
     fillColor: 'gold',
@@ -39,19 +40,21 @@ function initialize() {
   // Refer to http://earthquake.usgs.gov/fdsnws/event/1/ for more information on the data Feeds from USGS
   usgsFeed.src = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojsonp';
   document.getElementsByTagName('head')[0].appendChild(usgsFeed);
-} // end of init
+} // end of init. Phew... fially
 
 var infowindow = new google.maps.InfoWindow({
-  // just a place holder in case something shitty happens...
+  // just a placeholder in case something shitty happens...
   content: "Sorry dude. I couldn't find any data"
 });
 
 // callback function from the jsonp source
 window.eqfeed_callback = function(results) {
-  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // used to label the events such that it shows which is the oldest. This is assuming something really shitty doesn't happen to earth because we'll be in deep shit if there were more than 26 mega douchebag earthquakes in one day.
+  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';/* used to label the events such that it shows which is the oldest. 
+  This is assuming something really shitty doesn't happen to earth because we'll be in deep shit if there were more 
+  than 26 mega douchebag earthquakes in one day :( */
   var labelIndex = 0; // index to lable the markers
 
-  // fun part begins here. looping through the geojson data
+  // Do I need to explain this stuff?
   for (var i = 0; i < results.features.length; i++) {
     var coordinates = results.features[i].geometry.coordinates;
     var latLng = new google.maps.LatLng(coordinates[1],coordinates[0]);
@@ -83,12 +86,12 @@ window.eqfeed_callback = function(results) {
     "<b>Last Updated: </b>" + new Date(parseInt(results.features[i].properties.updated)) +  "</br>" +
     "<b>Data Source: </b>" + "<a href=" + results.features[i].properties.url + "> USGS Earthquake Hazards Program </a>" +  "</br>"
     ;
-    // stupid ass closure taking up my life
+    // stupid ass closure taking up all my life
     bindInfoWindow(marker, map, infowindow, props, latLng, results.features[i].properties.mag);
   }
 }
 
-// a binder function seperately because... i had to spend one whole hour trying to figure out why the map was displaying only the last event. Turns out I needed proper "closure"
+/* Even a petty little map needs "closure" to move on from something */
 function bindInfoWindow(marker, map, infowindow, description, latlng, mag) {
   marker.addListener('click', function() {
       infowindow.setContent(description);
@@ -119,7 +122,7 @@ function bindInfoWindow(marker, map, infowindow, description, latlng, mag) {
       return 'hsl(' + color[0] + ',' + color[1] + '%,' + color[2] + '%)';
     }
 
-  // this is not the actual radius of the impact zone, and I have no idea how to get that data
+  // WARNING!!!!!! This is not the actual radius of the impact zone, and I have no idea how to get that data
   var epicCenter = new google.maps.Circle({
     strokeColor: color,
     strokeOpacity: 0.85,
