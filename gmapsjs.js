@@ -17,7 +17,7 @@ function initialize() {
 
   //Star has been copied from Google https://developers.google.com/maps/documentation/javascript/examples/icon-complex
   // or you could completely remove this part and use an actual image or icon marking the maldives.
-  // On a totally serious note, I am actually marking Maldives because it is too fu*&ing small to see when the map is zoomed out -_-
+  // On a totally serious note, I am actually marking Maldives because it is too small to see when the map is zoomed out -_-
   var mordisStar = {
     path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
     fillColor: 'gold',
@@ -40,18 +40,18 @@ function initialize() {
   // Refer to http://earthquake.usgs.gov/fdsnws/event/1/ for more information on the data Feeds from USGS
   usgsFeed.src = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojsonp';
   document.getElementsByTagName('head')[0].appendChild(usgsFeed);
-} // end of init. Phew... fially
+} 
 
 var infowindow = new google.maps.InfoWindow({
-  // just a placeholder in case something shitty happens...
+  // just a placeholder in case something happens...
   content: "Sorry dude. I couldn't find any data"
 });
 
 // callback function from the jsonp source
 window.eqfeed_callback = function(results) {
   var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';/* used to label the events such that it shows which is the oldest. 
-  This is assuming something really shitty doesn't happen to earth because we'll be in deep shit if there were more 
-  than 26 mega douchebag earthquakes in one day :( */
+  This is assuming something really bad doesn't happen to earth because we'll be in deep trouble if there were more 
+  than 26 huge earthquakes in one day :( */
   var labelIndex = 0; // index to lable the markers
 
   // Do I need to explain this stuff?
@@ -86,7 +86,7 @@ window.eqfeed_callback = function(results) {
     "<b>Last Updated: </b>" + new Date(parseInt(results.features[i].properties.updated)) +  "</br>" +
     "<b>Data Source: </b>" + "<a href=" + results.features[i].properties.url + "> USGS Earthquake Hazards Program </a>" +  "</br>"
     ;
-    // stupid ass closure taking up all my life
+    // stupid closure taking up all my life
     bindInfoWindow(marker, map, infowindow, props, latLng, results.features[i].properties.mag);
   }
 }
@@ -109,7 +109,7 @@ function bindInfoWindow(marker, map, infowindow, description, latlng, mag) {
   var maxMag = 7.0;
 
   // color interpolate function copied from Google API documentation
-  // fraction represents where the value sits between the min and max
+  
   var fraction = (Math.min(mag, maxMag) - minMag) / (maxMag - minMag);
   var color = interpolateHsl(low, high, fraction);
   function interpolateHsl(lowHsl, highHsl, fraction) {
